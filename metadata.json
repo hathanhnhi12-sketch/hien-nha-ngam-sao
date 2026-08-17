@@ -1,0 +1,6 @@
+{
+  "name": "Hiên Nhà Ngắm Sao",
+  "description": "Một góc nhỏ dưới mái hiên để ngắm sao, gặp gỡ những nhân vật kỳ diệu, lắng nghe giai điệu đêm và lưu giữ những câu chuyện chữa lành.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

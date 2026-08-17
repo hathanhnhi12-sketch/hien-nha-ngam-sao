@@ -1,0 +1,136 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    function isOwner() {
+      return request.auth != null && (
+        request.auth.token.email == 'thanhnhi12@gmail.com' ||
+        request.auth.token.email == 'hathanhnhi12@gmail.com' ||
+        request.auth.token.email == 'thanhnhiha12@gmail.com' ||
+        request.auth.token.role == 'owner'
+      );
+    }
+    
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isUser(userId) {
+      return request.auth != null && request.auth.uid == userId;
+    }
+
+    // Characters collection
+    match /characters/{characterId} {
+      allow read: if resource.data.isHidden != true || isOwner();
+      allow create, update, delete: if isOwner();
+      
+      // Subcollection comments
+      match /comments/{commentId} {
+        allow read: if resource.data.isHidden != true || isOwner();
+        allow create: if request.resource.data.nickname is string &&
+                         request.resource.data.nickname.size() >= 2 &&
+                         request.resource.data.nickname.size() <= 30 &&
+                         request.resource.data.content is string &&
+                         request.resource.data.content.size() >= 1 &&
+                         request.resource.data.content.size() <= 500 &&
+                         request.resource.data.isHidden == false;
+        allow update, delete: if isOwner();
+      }
+    }
+
+    // Gallery Folders & Items
+    match /gallery_folders/{folderId} {
+      allow read: if true;
+      allow write: if isOwner();
+    }
+    
+    match /gallery_items/{itemId} {
+      allow read: if resource.data.isDeleted != true || isOwner();
+      allow write: if isOwner();
+    }
+    
+    match /gallery_config/{configId} {
+      allow read: if true;
+      allow write: if isOwner();
+    }
+
+    // Playlist
+    match /playlist/{trackId} {
+      allow read: if true;
+      allow write: if isOwner();
+    }
+
+    // Quotes
+    match /quotes/{quoteId} {
+      allow read: if true;
+      allow write: if isOwner();
+    }
+
+    // Tarot Cards
+    match /tarot_cards/{cardId} {
+      allow read: if true;
+      allow write: if isOwner();
+    }
+
+    // Love Letters
+    match /love_letters/{letterId} {
+      allow read: if resource.data.isPublic == true || isOwner();
+      allow create: if request.resource.data.content is string &&
+                       request.resource.data.content.size() <= 1000;
+      allow update, delete: if isOwner();
+    }
+
+    // Vote Settings & Votes
+    match /vote_settings/{settingId} {
+      allow read: if true;
+      allow write: if isOwner();
+    }
+
+    // Minigame Data (Items, Recipes, Quests)
+    match /minigame_items/{itemId} {
+      allow read: if true;
+      allow write: if isOwner();
+    }
+    match /minigame_recipes/{recipeId} {
+      allow read: if true;
+      allow write: if isOwner();
+    }
+    match /quests/{questId} {
+      allow read: if true;
+      allow write: if isOwner();
+    }
+
+    // User Data & Profiles
+    match /users/{userId} {
+      allow read: if true;
+      allow create: if isUser(userId) || isOwner() || true;
+      allow update: if isUser(userId) || isOwner() || 
+        (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['displayName', 'nickname', 'bio', 'avatarUrl', 'email', 'updatedAt']));
+      allow delete: if isOwner();
+
+      // Subcollection mailbox
+      match /mailbox/{messageId} {
+        allow read: if true;
+        allow update: if request.resource.data.diff(resource.data).affectedKeys().hasOnly(['isRead', 'isClaimed']);
+        allow create, delete: if isOwner();
+      }
+    }
+
+    // Reward codes and redemptions
+    match /rewardCodes/{codeId} {
+      allow read: if true;
+      allow write: if isOwner();
+
+      match /redemptions/{redemptionId} {
+        allow read: if true;
+        allow write: if isOwner();
+      }
+    }
+
+    // Events
+    match /events/{eventId} {
+      allow read: if true;
+      allow write: if isOwner();
+    }
+  }
+}
