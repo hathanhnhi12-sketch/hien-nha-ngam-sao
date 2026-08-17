@@ -1,0 +1,76 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    color: #1e1b4b;
+    background-color: #f7f8fc;
+  }
+
+  .dark body {
+    color: #f1f5f9;
+    background-color: #080b1e;
+  }
+
+  h1, h2, h3, .font-display {
+    font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+  }
+
+  .font-serif-display {
+    font-family: 'Playfair Display', serif;
+  }
+}
+
+/* Hero Title Celestial Gradient & Glow */
+.hero-title-gradient {
+  font-family: 'Fraunces', 'Be Vietnam Pro', system-ui, -apple-system, sans-serif;
+  font-weight: 900;
+  background: linear-gradient(
+    90deg,
+    #FFE27A 0%,
+    #FFD36A 20%,
+    #F6A6D8 48%,
+    #C7B6FF 72%,
+    #9CCBFF 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 2px 10px rgba(255, 226, 122, 0.35))
+          drop-shadow(0 6px 24px rgba(199, 182, 255, 0.38))
+          drop-shadow(0 0 35px rgba(156, 203, 255, 0.25));
+}
+
+/* Custom delicate scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(165, 180, 252, 0.4);
+  border-radius: 9999px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(129, 140, 248, 0.7);
+}
+
+@keyframes floatSlow {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(1deg); }
+}
+
+.animate-float-slow {
+  animation: floatSlow 6s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.05); }
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 4s ease-in-out infinite;
+}
